@@ -8,6 +8,11 @@ public:
 	WeatherStation();
 	virtual ~WeatherStation();
 	Record getStats();
+private:
+	float tempAmplitude,tempBase;
+	float presAmplitude,presBase;
+	float humAmplitude,humBase;
+	float windAmplitude,windBase;
 };
 
 
