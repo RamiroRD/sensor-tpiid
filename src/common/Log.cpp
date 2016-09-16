@@ -13,10 +13,10 @@ static constexpr size_t HEADER_SIZE = sizeof(Count)+sizeof(Index);
 static constexpr size_t RECORD_SIZE = sizeof(Temperature)
 									+ sizeof(Humidity)   + sizeof(Pressure)
 									+ 2*sizeof(Velocity) + sizeof(time_t);
-
+static const char * LOCK_FILENAME="lock";
 
 Log::Log(bool readOnly)
-: readOnlyMode(readOnly)
+: readOnlyMode(readOnly),storageFD(-1),lockFD(-1)
 {
 	/*
 	* Tamaño que debería tener el archivo si esta todo bien. Se cuentan los dos
@@ -196,11 +196,12 @@ void Log::insert(const Record &record)
 		/*
 		 * Actualizamos la cabezera del archivo. Esto forma una sección critica
 		 */
-		 // TODO lock
+		lock();
 		setCount(count+1);
 		setLastIndex(count % (1<<(8*sizeof(Index))));
 
 		fsync(storageFD);
+		unlock();
 		/* Fin de sección crítica */
 		
 		if(count+1==0)
@@ -216,8 +217,73 @@ Record Log::getLast()
 	return get(getLastIndex());
 }
 
+int Log::lock()
+{
+	if(!readOnlyMode)
+	{
+		chdir(LOG_PATH);
+		lockFD = open(LOCK_FILENAME, O_CREAT | O_RDWR);
+		if(lockFD == -1)
+		{
+			std::cerr << "<1>No se pudo poner lock. Saliendo..." << std::endl;
+			perror("<1>");
+			return -1;
+		}
+		if(flock(lockFD,LOCK_EX) == -1)
+		{
+			perror("<1>No se pudo flockear el lock. Razón");
+			return -1;
+		}
+		return 0;
+	}else{	
+		std::cerr << "No se puede poner lock. Estamos en modo sólo lectura."
+			<< std::endl;
+		return -1;
+	}
+}
+
+int Log::unlock()
+{
+	if(!readOnlyMode)
+	{
+		flock(lockFD,LOCK_UN);
+		close(lockFD);
+		if(unlink(LOCK_FILENAME) == -1)
+		{
+			perror("<1> No se pudo sacar lock. Razón");
+			return -1;
+		}else		
+			return 0;
+	}else{	
+		std::cerr << "No se puede sacar lock. Estamos en modo sólo lectura."
+			<< std::endl;
+		return -1;
+	}
+}
+
+int Log::waitForLock()
+{	
+	int count = 0;
+	const int MAX_COUNT = 5;
+	while(access(LOCK_FILENAME, F_OK) == 0 && count < MAX_COUNT)
+	{
+		perror("");
+		sleep(1);
+		count++;
+	}
+	if (count == 5)
+	{
+		std::cerr << "No se pudo acceder al archivo." << std::endl;
+		std::cerr << "Se intentaron " << count << " veces." << std::endl;
+		return -1;
+	}else
+		return 0;
+}
+
 Record Log::get(const Index index)
 {
+	if(waitForLock() == -1)
+		exit(-1);
 	Temperature temp;
 	Humidity hum;
 	Pressure pres;
@@ -248,5 +314,7 @@ Record Log::get(const Index index)
 Log::~Log()
 {
 	close(storageFD);
+	if(!readOnlyMode)
+		unlock();
 	std::cerr << "Log cerrado!" << std::endl;
 }

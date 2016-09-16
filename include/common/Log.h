@@ -73,10 +73,15 @@ public:
 private:
 	void create();
 	void setLastIndex(Index);
+	int lock(); //RW
+	int unlock(); //RW
+	int waitForLock(); //RO
 	void setCount(Count);
 	const std::list<Record> lastN(size_t);
+	
+	const bool readOnlyMode;
 	int storageFD;
-	bool readOnlyMode;
+	int lockFD;
 };
 
 
