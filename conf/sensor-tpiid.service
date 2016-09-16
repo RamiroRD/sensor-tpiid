@@ -1,0 +1,12 @@
+[Unit]
+Description=Simulador de estación meteorológica.
+
+[Service]
+Type=simple
+ExecStart=/usr/sbin/sensor-tpiid
+ExecReload=/bin/kill -s HUP $MAINPID
+ExecStop=/bin/kill -s TERM $MAINPID
+User=sensor-tpiid
+
+[Install]
+WantedBy=multi-user.target
