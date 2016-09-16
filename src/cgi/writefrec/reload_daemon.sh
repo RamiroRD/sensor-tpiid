@@ -1,1 +1,1 @@
-systemctl reload sensor-tpiid
+systemctl reload sensor-tpiid >> /dev/null
