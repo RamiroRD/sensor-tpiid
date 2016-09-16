@@ -1,9 +1,9 @@
 > /etc/sensor-tpiid/sensor-tpiid.conf
 echo "60" >> /etc/sensor-tpiid/sensor-tpiid.conf
 
-sudo systemctl reload sensor-tpiid >> /dev/null
+sudo systemctl reload sensor-tpiid > /dev/null 2>&1
 
-	echo "Content-type: text/html"
+echo "Content-type: text/html"
 
 echo ""
 

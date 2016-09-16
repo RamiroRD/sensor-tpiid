@@ -60,6 +60,7 @@ all: $(BDIR)daemon $(BDIR)show
 install: all
 	$(INSTALL) $(BDIR)daemon $(DAEMONDIR)sensor-tpiid
 	$(INSTALL) $(BDIR)show $(CGIDIR)show
+	$(INSTALL) conf/* $(CGIDIR)
 	mkdir -p $(CONFPATH)
 	touch $(CONFPATH)$(CONFFILE)
 	chown -R $(DUSER):$(DUSER) $(CONFPATH)

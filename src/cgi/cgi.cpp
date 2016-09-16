@@ -82,12 +82,11 @@ int main()
 		}
 
 		std::cout <<" </select></td><td>";
-std::cout <<"<table><tr><td>	<a href=\"./writefreq/change_freq_1.cgi\">Setear Frecuencia en: 1</a>";
-std::cout <<"</td></tr><tr><td>	<a href=\"./writefreq/change_freq_2.cgi\">Setear Frecuencia en: 2</a></td></tr><tr><td>";
-std::cout <<"	<a href=\"./writefreq/change_freq_5.cgi\">Setear Frecuencia en: 5</a></td></tr><tr><td>	<a href=\"./writefreq/change_freq_10.cgi\">Setear Frecuencia en: 10</a></td></tr><tr><td>";
-std::cout <<"	<a href=\"./writefreq/change_freq_30.cgi\">Setear Frecuencia en: 30</a></td></tr></td></tr><tr><td>	<a href=\"./writefreq/change_freq_60.cgi\">Setear Frecuencia en: 60</a></td></tr></table>";
-
-std::cout <<"</td></tr></table> \n <hr><table><th>Muestra</th><th>Temperatura</th><th>Presi&oacuten</th><th>Humedad</th>	<th>Viento</th>";
+		std::cout <<"<table><tr><td>	<a href=\"./change_freq_1.sh\">Setear Frecuencia en: 1</a>";
+		std::cout <<"</td></tr><tr><td>	<a href=\"./change_freq_2.sh\">Setear Frecuencia en: 2</a></td></tr><tr><td>";
+		std::cout <<"	<a href=\"./change_freq_5.sh\">Setear Frecuencia en: 5</a></td></tr><tr><td>	<a href=\"./change_freq_10.sh\">Setear Frecuencia en: 10</a></td></tr><tr><td>";
+		std::cout <<"	<a href=\"./change_freq_30.sh\">Setear Frecuencia en: 30</a></td></tr></td></tr><tr><td>	<a href=\"./change_freq_60.sh\">Setear Frecuencia en: 60</a></td></tr></table>";
+		std::cout <<"</td></tr></table> \n <hr><table><th>Muestra</th><th>Temperatura</th><th>Presi&oacuten</th><th>Humedad</th>	<th>Viento</th>";
 
 
 		const Record ultimo = log.get(lastInd);
