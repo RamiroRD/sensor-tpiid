@@ -62,31 +62,36 @@ int main()
 
 
 
-		std::cout << "Content-type: text/html" << std::endl << std::endl;
+		std::cout << "Content-Type: text/html;charset=utf8" << std::endl << std::endl << std::endl;;
 
-		std::cout << "<html><head><title>Estaci&oacuten  meteorol&oacutegica</title>";
-		//std::cout << " <META HTTP-EQUIV="refresh" CONTENT="15">"; esto hace que la pag se actualice sola
-		std::cout <<"</head> \n \n <body><div align=\"center\"><br/><br/><h1> Estaci&oacuten Meteorol&oacutegica </h1>";
-		std::cout <<"<br/><br/> \n \n <br/><hr>";
-		std::cout <<"<table><tr><td><a href=\"./show\">Recargar Sitio</a>";
-		std::cout <<"</td><td style=\"padding-left:80px;\"><p>Frecuencia de Muestreo (Segundos):</p>	<select>";
+		std::cout << "<html><head><title>Estaci&oacuten  meteorol&oacutegica</title></head>";
+		
+		std::cout <<"<body><div align=\"center\"><br/><br/><h1> Estaci&oacuten Meteorol&oacutegica </h1> <br><br>";
+		
+		std::cout <<"<br><hr>";
+		
+		std::cout <<"<table><tr><td><a href=\"./show\">Recargar Sitio</a></td>";
+		
+		std::cout <<"<td>" << "Frecuencia de muestreo (s):" << "</td>";
 
+		
 
-
+		std::cout << "<td>";
+		std::cout << "<form action=\"change_freq\">";
+		std::cout << "<select name=\"freqs\">";
 		auto valores 	= {1,2,5,10,30,60};
 		for(auto i : valores)
 		{
-            std::cout <<"  <option value=\"" << i << "\"";
-			if (i == freq) std::cout << "selected";
-			std::cout <<">" << i << "</option>";
+			std::cout << "<option value=\"" << i << "\"";
+			if (freq == i)
+				std::cout << " selected";
+			std::cout << ">" << i << "</option>";
 		}
-
-		std::cout <<" </select></td><td>";
-		std::cout <<"<table><tr><td>	<a href=\"./change_freq_1.sh\">Setear Frecuencia en: 1</a>";
-		std::cout <<"</td></tr><tr><td>	<a href=\"./change_freq_2.sh\">Setear Frecuencia en: 2</a></td></tr><tr><td>";
-		std::cout <<"	<a href=\"./change_freq_5.sh\">Setear Frecuencia en: 5</a></td></tr><tr><td>	<a href=\"./change_freq_10.sh\">Setear Frecuencia en: 10</a></td></tr><tr><td>";
-		std::cout <<"	<a href=\"./change_freq_30.sh\">Setear Frecuencia en: 30</a></td></tr></td></tr><tr><td>	<a href=\"./change_freq_60.sh\">Setear Frecuencia en: 60</a></td></tr></table>";
-		std::cout <<"</td></tr></table> \n <hr><table><th>Muestra</th><th>Temperatura</th><th>Presi&oacuten</th><th>Humedad</th>	<th>Viento</th>";
+		
+		std::cout << "</select><input type=\"submit\"/></form>";
+		std::cout << "</td></tr></table><br>";
+		
+		std::cout <<"<table><th>Muestra</th><th>Temperatura</th><th>Presi&oacuten</th><th>Humedad</th>	<th>Viento</th>";
 
 
 		const Record ultimo = log.get(lastInd);
@@ -101,8 +106,9 @@ int main()
 				<< "</td><td>" << acumH
 				<< "</td><td>" << acumW
 				<< " km/h</td></tr>";
-		std::cout << "</table><hr><p>Se tomaron " << N
-					<< " muestras.</p></div></body></html>" << std::endl;
+		std::cout << "</table><hr>";
+		std::cout << "<p>Se tomaron " << N << " muestras." << std::endl;
+		std::cout << "</p></div></body></html>" << std::endl;
 		return 0;
    }
    else

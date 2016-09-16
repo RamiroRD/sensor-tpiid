@@ -24,6 +24,9 @@ $(BDIR)daemon: $(ODIR)daemon.o $(ODIR)Log.o $(ODIR)WeatherStation.o $(ODIR)paths
 $(BDIR)show: $(ODIR)cgi.o $(ODIR)Log.o $(ODIR)paths.o
 	$(CC) $(CFLAGS) -o $(BDIR)show $(ODIR)cgi.o $(ODIR)Log.o $(ODIR)paths.o
 	
+$(BDIR)change_freq: $(SDIR)cgi/change_freq.cpp  $(ODIR)paths.o
+	$(CC)  $(CFLAGS) -o $(BDIR)change_freq $(SDIR)cgi/change_freq.cpp $(ODIR)paths.o
+	
 $(TDIR)LogTest:  $(ODIR)LogTest.o $(ODIR)Log.o $(ODIR)paths.o
 	$(CC) $(CFLAGS) -o $(TDIR)LogTest $(ODIR)LogTest.o $(ODIR)Log.o \
 			$(ODIR)paths.o
@@ -51,16 +54,18 @@ $(ODIR)paths.o: $(SDIR)common/paths.cpp  $(IDIR)common/paths.h
 $(ODIR)cgi.o: $(SDIR)cgi/cgi.cpp $(IDIR)common/Log.h $(IDIR)common/paths.h\
 			$(IDIR)common/Record.h 
 	$(CC) -c $(CFLAGS) -o $(ODIR)cgi.o $(SDIR)cgi/cgi.cpp 
+	
+
 
 
 .PHONY: all
-all: $(BDIR)daemon $(BDIR)show
+all: $(BDIR)daemon $(BDIR)show $(BDIR)change_freq
 	
 .PHONY: install
 install: all
 	$(INSTALL) $(BDIR)daemon $(DAEMONDIR)sensor-tpiid
 	$(INSTALL) $(BDIR)show $(CGIDIR)show
-	$(INSTALL) conf/* $(CGIDIR)
+	$(INSTALL) $(BDIR)change_freq $(CGIDIR)change_freq
 	mkdir -p $(CONFPATH)
 	touch $(CONFPATH)$(CONFFILE)
 	chown -R $(DUSER):$(DUSER) $(CONFPATH)

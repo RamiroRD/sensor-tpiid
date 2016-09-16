@@ -48,7 +48,7 @@ Record WeatherStation::getStats()
 							
 
 	const Pressure pres		= presAmplitude * (std::abs(std::sin(d/2.0))+gen())
-							+ humBase;
+							+ presBase;
 
 	const Velocity windX	= windAmplitude * (std::sin(d/2.0)+gen())
 							+ windBase;
