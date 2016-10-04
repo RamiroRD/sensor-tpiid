@@ -36,7 +36,7 @@ Log::Log(bool readOnly)
 	
 	/* Abrimos el archivo en el modo que corresponda */
 	if(readOnlyMode)
-		storageFD = open(LOG_FILENAME,  O_CREAT | O_RDONLY);
+		storageFD = open(LOG_FILENAME,  O_RDONLY);
 	else
 		storageFD = open(LOG_FILENAME,  O_CREAT | O_RDWR);
 	
@@ -154,7 +154,7 @@ void Log::create()
 		}
 		lseek(storageFD,0,SEEK_SET);
 		setCount(0);
-		setLastIndex(0);
+		setLastIndex(-1);
 			
 	}else{
 		std::cerr << "<1>Estamos en modo lectura, saliendo..." << std::endl;
@@ -176,7 +176,7 @@ void Log::insert(const Record &record)
 {
 	if(!readOnlyMode)
 	{
-		const Count count		= getCount();
+		const Count count		= getCount()+1;
 		// Se hace el incremento aca para que se de el overflow naturalmente
 		const Index last		= getLastIndex()+1;
 		const size_t writePos = HEADER_SIZE + last*RECORD_SIZE;
@@ -197,14 +197,14 @@ void Log::insert(const Record &record)
 		 * Actualizamos la cabezera del archivo. Esto forma una sección critica
 		 */
 		lock();
-		setCount(count+1);
-		setLastIndex(count % (1<<(8*sizeof(Index))));
+		setCount(count);
+		setLastIndex(last % (1<<(8*sizeof(Index))));
 
 		fsync(storageFD);
 		unlock();
 		/* Fin de sección crítica */
 		
-		if(count+1==0)
+		if(count==0)
 			std::cerr << "Overflow en campo de cantidad de registros!";
 	}else{
 		std::cerr << "<2>Se está tratando de insertar en modo de sólo lectura!"

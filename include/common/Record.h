@@ -15,8 +15,8 @@ typedef float Velocity;
 class Record
 {
 public:
-	Record(Temperature t,Humidity h,Pressure p ,Velocity wx, Velocity wy,
-			time_t time)
+	Record(Temperature t =0,Humidity h=0,Pressure p=0 ,Velocity wx=0, Velocity wy=0,
+			time_t time=0)
 	: temp(t), hum(h), pres(p), windX(wx), windY(wy), timestamp(time){};
 	
 	bool operator==(const Record& other) const

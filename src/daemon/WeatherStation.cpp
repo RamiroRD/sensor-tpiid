@@ -30,7 +30,7 @@ Record WeatherStation::getStats()
 {
 
 	std::default_random_engine			generator;
-	std::normal_distribution<double>	distribution(-0.25,0.25);
+	std::normal_distribution<double>	distribution(-0.01,0.01);
 	auto gen = std::bind(distribution,generator);
 	
 	
